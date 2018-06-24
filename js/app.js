@@ -25,14 +25,14 @@ Enemy.prototype.render = function() {
 // This class requires an update(), render() and
 // a handleInput() method.
 class Hero {
-    constructor(sprite, x, y) {
+    constructor(sprite, x = 101 * 2 , y = ((83 * 5) -30)) {
         this.sprite = sprite;
         this.x = x;
         this.y = y;
     }
     // Update
-    update() {
-
+    update(val, prop) {
+        this[prop] = this[prop] + val;
     }
     // Render hero
     render() {
@@ -40,6 +40,8 @@ class Hero {
     }
     // Handle user keyboard input
     handleInput(key) {
+        const CANVAS_TILE_WIDTH = 101;
+        const CANVAS_TILE_HEIGHT = 83;
         const LEFT_WALL = 0;
         const RIGHT_WALL = 404;
         const TOP_WALL = 53;
@@ -48,22 +50,22 @@ class Hero {
         switch (key) {
             case 'left':
                 if (this.x > LEFT_WALL) {
-                    this.x -= CANVAS_TILE_WIDTH;
+                    this.update(-CANVAS_TILE_WIDTH, 'x');
                 }
                 break;
             case 'right':
                 if (this.x < RIGHT_WALL) {
-                    this.x += CANVAS_TILE_WIDTH;
+                    this.update(CANVAS_TILE_WIDTH, 'x');
                 }
                 break;
             case 'up':
                if (this.y > TOP_WALL) {
-                    this.y -= CANVAS_TILE_HEIGHT;
+                this.update(-CANVAS_TILE_HEIGHT, 'y');
                 }
                 break;
             case 'down':
                 if (this.y < BOTTOM_WALL) {
-                    this.y += CANVAS_TILE_HEIGHT;
+                    this.update(CANVAS_TILE_HEIGHT, 'y');
                 }
                 break;
         }
@@ -71,20 +73,11 @@ class Hero {
     }
 }
 
-const CANVAS_TILE_WIDTH = 101;
-const CANVAS_TILE_HEIGHT = 83;
-const startingTileX = Math.floor(CANVAS_TILE_WIDTH * 2);
-const startingTileY = Math.floor(CANVAS_TILE_HEIGHT * 5 -30);
-
-const player = new Hero('images/char-boy.png', startingTileX, startingTileY);
-
-
-
 
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
-
+const player = new Hero('images/char-boy.png');
 
 
 // This listens for key presses and sends the keys to your
