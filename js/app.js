@@ -1,8 +1,9 @@
 // Enemies our player must avoid
-var Enemy = function() {
+var Enemy = function(x, y) {
     // Variables applied to each of our instances go here,
     // we've provided one for you to get started
-
+    this.x = x;
+    this.y = y;
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
     this.sprite = 'images/enemy-bug.png';
@@ -25,7 +26,7 @@ Enemy.prototype.render = function() {
 // This class requires an update(), render() and
 // a handleInput() method.
 class Hero {
-    constructor(sprite, x = 101 * 2 , y = ((83 * 5) -30)) {
+    constructor(sprite, x, y) {
         this.sprite = sprite;
         this.x = x;
         this.y = y;
@@ -40,8 +41,6 @@ class Hero {
     }
     // Handle user keyboard input
     handleInput(key) {
-        const CANVAS_TILE_WIDTH = 101;
-        const CANVAS_TILE_HEIGHT = 83;
         const LEFT_WALL = 0;
         const RIGHT_WALL = 404;
         const TOP_WALL = 53;
@@ -77,7 +76,18 @@ class Hero {
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
-const player = new Hero('images/char-boy.png');
+const CANVAS_TILE_WIDTH = 101;
+const CANVAS_TILE_HEIGHT = 83;
+const FIRST_TILE_X = 0;
+const FIRST_TILE_Y = 53;
+const HERO_START_TILE_X = FIRST_TILE_X + (CANVAS_TILE_WIDTH * 2);
+const HERO_START_TILE_Y = FIRST_TILE_Y + (CANVAS_TILE_HEIGHT * 4);
+
+const player = new Hero('images/char-boy.png', HERO_START_TILE_X, HERO_START_TILE_Y);
+const enemy1 = new Enemy(FIRST_TILE_X,FIRST_TILE_Y);
+const allEnemies = [enemy1];
+
+
 
 
 // This listens for key presses and sends the keys to your
