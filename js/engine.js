@@ -79,7 +79,7 @@ var Engine = (function(global) {
      */
     function update(dt) {
         updateEntities(dt);
-        // checkCollisions();
+        checkCollisions();
     }
 
     /* This is called by the update function and loops through all of the
@@ -94,6 +94,28 @@ var Engine = (function(global) {
             enemy.update(dt);
         });
         player.update(dt);
+    }
+
+    function checkCollisions() {
+        allEnemies.forEach(function(enemy) {
+            // console.log(Math.round(enemy.x));
+            if (collision(enemy)) {
+                player.x = star
+            }
+        });
+    }
+
+    function collision(enemy) {
+        const COLLISION_BUFFER = 2 // Reduce hitbox size
+        const enemyLeft = enemy.x;
+        const enemyRight = enemy.x + (CANVAS_TILE_WIDTH / COLLISION_BUFFER);
+        const playerLeft = player.x;
+        const playerRight = player.x + (CANVAS_TILE_WIDTH / COLLISION_BUFFER);
+        return ((enemyRight > playerLeft && 
+            enemyLeft < playerRight) && 
+            (enemy.y === player.y)) 
+
+
     }
 
     /* This function initially draws the "game level", it will then call
