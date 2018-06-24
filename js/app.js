@@ -1,3 +1,15 @@
+const LEFT_WALL = 0;
+const RIGHT_WALL = 404;
+const TOP_WALL = 53;
+const BOTTOM_WALL = 385;
+const CANVAS_TILE_WIDTH = 101;
+const CANVAS_TILE_HEIGHT = 83;
+const heroStartTileX = LEFT_WALL + (CANVAS_TILE_WIDTH * 2);
+const heroStartTileY = TOP_WALL + (CANVAS_TILE_HEIGHT * 4);
+const enemyOneStartTileX = LEFT_WALL - CANVAS_TILE_WIDTH;
+const enemyOneStartTileY = TOP_WALL;
+
+
 // Enemies our player must avoid
 var Enemy = function(x, y) {
     // Variables applied to each of our instances go here,
@@ -15,6 +27,15 @@ Enemy.prototype.update = function(dt) {
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
+    // console.log(dt * 12);
+    if (this.x < RIGHT_WALL +CANVAS_TILE_WIDTH) {
+        this.x += 200 * dt;
+        console.log('Im rolling');
+    }
+    else {
+        this.x = enemyOneStartTileX;
+    }
+  
 };
 
 // Draw the enemy on the screen, required method for game
@@ -41,10 +62,7 @@ class Hero {
     }
     // Handle user keyboard input
     handleInput(key) {
-        const LEFT_WALL = 0;
-        const RIGHT_WALL = 404;
-        const TOP_WALL = 53;
-        const BOTTOM_WALL = 385;
+   
 
         switch (key) {
             case 'left':
@@ -68,7 +86,7 @@ class Hero {
                 }
                 break;
         }
-        console.log(this.x,this.y)
+        console.log(this.x,this.y);
     }
 }
 
@@ -76,16 +94,11 @@ class Hero {
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
-const CANVAS_TILE_WIDTH = 101;
-const CANVAS_TILE_HEIGHT = 83;
-const FIRST_TILE_X = 0;
-const FIRST_TILE_Y = 53;
-const HERO_START_TILE_X = FIRST_TILE_X + (CANVAS_TILE_WIDTH * 2);
-const HERO_START_TILE_Y = FIRST_TILE_Y + (CANVAS_TILE_HEIGHT * 4);
 
-const player = new Hero('images/char-boy.png', HERO_START_TILE_X, HERO_START_TILE_Y);
-const enemy1 = new Enemy(FIRST_TILE_X,FIRST_TILE_Y);
-const allEnemies = [enemy1];
+
+const player = new Hero('images/char-boy.png', heroStartTileX, heroStartTileY);
+const enemyOne = new Enemy(enemyOneStartTileX, enemyOneStartTileY);
+const allEnemies = [enemyOne];
 
 
 
