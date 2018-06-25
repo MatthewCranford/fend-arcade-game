@@ -8,14 +8,27 @@ const heroStartTileX = LEFT_WALL + (CANVAS_TILE_WIDTH * 2);
 const heroStartTileY = TOP_WALL + (CANVAS_TILE_HEIGHT * 4);
 const enemyOneStartTileX = LEFT_WALL - CANVAS_TILE_WIDTH;
 const enemyOneStartTileY = TOP_WALL;
+const enemyTwoStartTileX = LEFT_WALL - CANVAS_TILE_WIDTH;
+const enemyTwoStartTileY = TOP_WALL + CANVAS_TILE_HEIGHT;
+const enemyThreeStartTileX = LEFT_WALL - (CANVAS_TILE_WIDTH * 3);
+const enemyThreeStartTileY = TOP_WALL + CANVAS_TILE_HEIGHT;
+const enemyFourStartTileX = LEFT_WALL - (CANVAS_TILE_WIDTH * 2);
+const enemyFourStartTileY = TOP_WALL + (CANVAS_TILE_HEIGHT * 2);
 
 
 // Enemies our player must avoid
-var Enemy = function(x, y) {
+/* 
+Accepts 3 parameters: 
+    x position, 
+    y position, 
+    and movement speed
+*/
+var Enemy = function(x, y, speed = 200) {
     // Variables applied to each of our instances go here,
     // we've provided one for you to get started
     this.x = x;
     this.y = y;
+    this.speed = speed;
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
     this.sprite = 'images/enemy-bug.png';
@@ -29,13 +42,11 @@ Enemy.prototype.update = function(dt) {
     // all computers.
     // console.log(dt * 12);
     if (this.x < RIGHT_WALL +CANVAS_TILE_WIDTH) {
-        this.x += 200 * dt;
-        console.log('Im rolling');
+        this.x += this.speed * dt;
     }
     else {
         this.x = enemyOneStartTileX;
     }
-  
 };
 
 // Draw the enemy on the screen, required method for game
@@ -46,11 +57,17 @@ Enemy.prototype.render = function() {
 // Now write your own player class
 // This class requires an update(), render() and
 // a handleInput() method.
+/* 
+Accepts 3 parameters: 
+    x position, 
+    y position, 
+    and sprite avatar
+*/
 class Hero {
-    constructor(sprite, x, y) {
-        this.sprite = sprite;
+    constructor(x, y, sprite) {
         this.x = x;
         this.y = y;
+        this.sprite = sprite;
     }
     // Render hero
     render() {
@@ -89,11 +106,12 @@ class Hero {
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
-
-
-const player = new Hero('images/char-boy.png', heroStartTileX, heroStartTileY);
-const enemyOne = new Enemy(enemyOneStartTileX, enemyOneStartTileY);
-const allEnemies = [enemyOne];
+const player = new Hero(heroStartTileX, heroStartTileY, 'images/char-boy.png');
+const enemyOne = new Enemy(enemyOneStartTileX, enemyOneStartTileY); // Top row
+const enemyTwo = new Enemy(enemyTwoStartTileX, enemyTwoStartTileY, 400); // Second row
+const enemyThree = new Enemy(enemyThreeStartTileX, enemyThreeStartTileY, 400); // Second row
+const enemyFour = new Enemy(enemyFourStartTileX, enemyFourStartTileY, 300); // Third row
+const allEnemies = [enemyOne, enemyTwo, enemyThree, enemyFour];
 
 
 
@@ -102,10 +120,13 @@ const allEnemies = [enemyOne];
 // Player.handleInput() method. You don't need to modify this.
 document.addEventListener('keyup', function(e) {
     var allowedKeys = {
+        // Arrows
         37: 'left',
         38: 'up',
         39: 'right',
         40: 'down',
+
+        // WASD
         65: 'left',
         87: 'up',
         68: 'right',
