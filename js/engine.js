@@ -22,7 +22,8 @@ var Engine = (function(global) {
         win = global.window,
         canvas = doc.createElement('canvas'),
         ctx = canvas.getContext('2d'),
-        lastTime;
+        lastTime,
+        frameId;
 
     canvas.width = 505;
     canvas.height = 606;
@@ -55,7 +56,26 @@ var Engine = (function(global) {
         /* Use the browser's requestAnimationFrame function to call this
          * function again as soon as the browser is able to draw another frame.
          */
-        win.requestAnimationFrame(main);
+        frameId = win.requestAnimationFrame(main);
+
+        // If player won -> stop animation frame and call victory
+        if (checkVictory()) {
+            win.cancelAnimationFrame(frameId);
+            toggleVictoryModal();
+        }  
+    }
+
+    // Check if player reached the water
+    function checkVictory() {
+        if (player.y === TOP_WALL) {
+            return true;
+        }
+    }
+
+    // Handle victory modal's on/off state
+    function toggleVictoryModal() {
+        const modal = document.querySelector('.modal');
+        modal.classList.toggle('hide');
     }
 
     /* This function does some initial setup that should only occur once,
@@ -68,6 +88,11 @@ var Engine = (function(global) {
         main();
     }
 
+    // Event listener for victory modal replay button which calls new game
+    document.querySelector('#replay').addEventListener('click', ()=> {
+        init();
+    })
+
     /* This function is called by main (our game loop) and itself calls all
      * of the functions which may need to update entity's data. Based on how
      * you implement your collision detection (when two entities occupy the
@@ -79,8 +104,7 @@ var Engine = (function(global) {
      */
     function update(dt) {
         updateEntities(dt);
-        checkCollisions();
-        checkVictory();
+        checkCollisions();  
     }
 
     /* This is called by the update function and loops through all of the
@@ -116,20 +140,6 @@ var Engine = (function(global) {
         return ((enemyRight > playerLeft && 
             enemyLeft < playerRight) && 
             (enemy.y === player.y));
-    }
-
-    function checkVictory() {
-        if (player.y === TOP_WALL) {
-            // victory()
-        }
-    }
-
-    function victory() {
-        // toggleModal()
-    }
-
-    function toggleModal() {
-        
     }
 
     /* This function initially draws the "game level", it will then call
@@ -197,7 +207,15 @@ var Engine = (function(global) {
      * those sorts of things. It's only called once by the init() method.
      */
     function reset() {
-        // noop
+        const modal = document.querySelector('.modal');
+
+        // If modal is active turn off
+        if (!modal.classList.contains('hide')) {
+            toggleVictoryModal();
+        }
+        // Reset player position back to start
+        player.x = heroStartTileX;
+        player.y = heroStartTileY;
     }
 
     /* Go ahead and load all of the images we know we're going to need to
