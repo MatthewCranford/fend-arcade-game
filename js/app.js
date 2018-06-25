@@ -52,40 +52,35 @@ class Hero {
         this.x = x;
         this.y = y;
     }
-    // Update
-    update(val, prop) {
-        this[prop] = this[prop] + val;
-    }
     // Render hero
     render() {
         ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
     }
     // Handle user keyboard input
     handleInput(key) {
-   
-
         switch (key) {
             case 'left':
                 if (this.x > LEFT_WALL) {
-                    this.update(-CANVAS_TILE_WIDTH, 'x');
+                    this.x -= CANVAS_TILE_WIDTH;
                 }
                 break;
             case 'right':
                 if (this.x < RIGHT_WALL) {
-                    this.update(CANVAS_TILE_WIDTH, 'x');
+                    this.x += CANVAS_TILE_WIDTH;
                 }
                 break;
             case 'up':
                if (this.y > TOP_WALL) {
-                this.update(-CANVAS_TILE_HEIGHT, 'y');
+                    this.y -= CANVAS_TILE_HEIGHT;
                 }
                 break;
             case 'down':
                 if (this.y < BOTTOM_WALL) {
-                    this.update(CANVAS_TILE_HEIGHT, 'y');
+                    this.y += CANVAS_TILE_HEIGHT;
                 }
                 break;
         }
+
         console.log(this.x,this.y);
     }
 }

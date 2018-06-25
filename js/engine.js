@@ -80,6 +80,7 @@ var Engine = (function(global) {
     function update(dt) {
         updateEntities(dt);
         checkCollisions();
+        checkVictory();
     }
 
     /* This is called by the update function and loops through all of the
@@ -93,7 +94,7 @@ var Engine = (function(global) {
         allEnemies.forEach(function(enemy) {
             enemy.update(dt);
         });
-        player.update(dt);
+        // player.update(dt);
     }
 
     function checkCollisions() {
@@ -114,9 +115,21 @@ var Engine = (function(global) {
         const playerRight = player.x + (CANVAS_TILE_WIDTH / COLLISION_BUFFER);
         return ((enemyRight > playerLeft && 
             enemyLeft < playerRight) && 
-            (enemy.y === player.y)) 
+            (enemy.y === player.y));
+    }
 
+    function checkVictory() {
+        if (player.y === TOP_WALL) {
+            // victory()
+        }
+    }
 
+    function victory() {
+        // toggleModal()
+    }
+
+    function toggleModal() {
+        
     }
 
     /* This function initially draws the "game level", it will then call
