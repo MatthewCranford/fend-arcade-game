@@ -100,7 +100,8 @@ var Engine = (function(global) {
         allEnemies.forEach(function(enemy) {
             // console.log(Math.round(enemy.x));
             if (collision(enemy)) {
-                player.x = star
+                player.x =  heroStartTileX;
+                player.y =  heroStartTileY;
             }
         });
     }
