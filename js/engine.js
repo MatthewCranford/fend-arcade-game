@@ -118,20 +118,19 @@ var Engine = (function(global) {
         allEnemies.forEach(function(enemy) {
             enemy.update(dt);
         });
-        // player.update(dt);
     }
 
+    // Check if collision occurred on each enemy unit in allEnemies arr
     function checkCollisions() {
         allEnemies.forEach(function(enemy) {
-            // console.log(Math.round(enemy.x));
-            if (collision(enemy)) {
-                player.x =  board.heroStartTileX;
-                player.y =  board.heroStartTileY;
+            if (isCollision(enemy)) {
+               reset();
             }
         });
     }
 
-    function collision(enemy) {
+    // Return boolean on whether a player and enemy collision occurred
+    function isCollision(enemy) {
         const COLLISION_BUFFER = 2 // Reduce hitbox size
         const enemyLeft = enemy.x;
         const enemyRight = enemy.x + (board.TILE_WIDTH / COLLISION_BUFFER);
