@@ -67,7 +67,7 @@ var Engine = (function(global) {
 
     // Check if player reached the water
     function checkVictory() {
-        if (player.y === TOP_WALL) {
+        if (player.y === board.TOP_WALL) {
             return true;
         }
     }
@@ -125,8 +125,8 @@ var Engine = (function(global) {
         allEnemies.forEach(function(enemy) {
             // console.log(Math.round(enemy.x));
             if (collision(enemy)) {
-                player.x =  heroStartTileX;
-                player.y =  heroStartTileY;
+                player.x =  board.heroStartTileX;
+                player.y =  board.heroStartTileY;
             }
         });
     }
@@ -134,9 +134,9 @@ var Engine = (function(global) {
     function collision(enemy) {
         const COLLISION_BUFFER = 2 // Reduce hitbox size
         const enemyLeft = enemy.x;
-        const enemyRight = enemy.x + (CANVAS_TILE_WIDTH / COLLISION_BUFFER);
+        const enemyRight = enemy.x + (board.TILE_WIDTH / COLLISION_BUFFER);
         const playerLeft = player.x;
-        const playerRight = player.x + (CANVAS_TILE_WIDTH / COLLISION_BUFFER);
+        const playerRight = player.x + (board.TILE_WIDTH / COLLISION_BUFFER);
         return ((enemyRight > playerLeft && 
             enemyLeft < playerRight) && 
             (enemy.y === player.y));
@@ -214,8 +214,8 @@ var Engine = (function(global) {
             toggleVictoryModal();
         }
         // Reset player position back to start
-        player.x = heroStartTileX;
-        player.y = heroStartTileY;
+        player.x = board.heroStartTileX;
+        player.y = board.heroStartTileY;
     }
 
     /* Go ahead and load all of the images we know we're going to need to

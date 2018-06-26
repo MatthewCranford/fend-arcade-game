@@ -1,21 +1,3 @@
-const LEFT_WALL = 0;
-const RIGHT_WALL = 404;
-const TOP_WALL = 53;
-const BOTTOM_WALL = 385;
-const CANVAS_TILE_WIDTH = 101;
-const CANVAS_TILE_HEIGHT = 83;
-const heroStartTileX = LEFT_WALL + (CANVAS_TILE_WIDTH * 2);
-const heroStartTileY = TOP_WALL + (CANVAS_TILE_HEIGHT * 4);
-const enemyOneStartTileX = LEFT_WALL - CANVAS_TILE_WIDTH;
-const enemyOneStartTileY = TOP_WALL;
-const enemyTwoStartTileX = LEFT_WALL - CANVAS_TILE_WIDTH;
-const enemyTwoStartTileY = TOP_WALL + CANVAS_TILE_HEIGHT;
-const enemyThreeStartTileX = LEFT_WALL - (CANVAS_TILE_WIDTH * 3);
-const enemyThreeStartTileY = TOP_WALL + CANVAS_TILE_HEIGHT;
-const enemyFourStartTileX = LEFT_WALL - (CANVAS_TILE_WIDTH * 2);
-const enemyFourStartTileY = TOP_WALL + (CANVAS_TILE_HEIGHT * 2);
-
-
 // Enemies our player must avoid
 /* 
 Accepts 3 parameters: 
@@ -29,6 +11,12 @@ var Enemy = function(x, y, speed = 200) {
     this.x = x;
     this.y = y;
     this.speed = speed;
+
+    // Save initial spawn location
+    this.startingX = x;
+    this.startingY = y;
+    
+    
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
     this.sprite = 'images/enemy-bug.png';
@@ -41,11 +29,12 @@ Enemy.prototype.update = function(dt) {
     // which will ensure the game runs at the same speed for
     // all computers.
     // console.log(dt * 12);
-    if (this.x < RIGHT_WALL +CANVAS_TILE_WIDTH) {
+    if (this.x < board.RIGHT_WALL - board.OFFSCREEN_TILE) {
         this.x += this.speed * dt;
     }
     else {
-        this.x = enemyOneStartTileX;
+        this.x = board.OFFSCREEN_TILE;
+        console.log(this.startingX);
     }
 };
 
@@ -77,28 +66,49 @@ class Hero {
     handleInput(key) {
         switch (key) {
             case 'left':
-                if (this.x > LEFT_WALL) {
-                    this.x -= CANVAS_TILE_WIDTH;
+                if (this.x > board.LEFT_WALL) {
+                    this.x -= board.TILE_WIDTH;
                 }
                 break;
             case 'right':
-                if (this.x < RIGHT_WALL) {
-                    this.x += CANVAS_TILE_WIDTH;
+                if (this.x < board.RIGHT_WALL) {
+                    this.x += board.TILE_WIDTH;
                 }
                 break;
             case 'up':
-               if (this.y > TOP_WALL) {
-                    this.y -= CANVAS_TILE_HEIGHT;
+               if (this.y > board.TOP_WALL) {
+                    this.y -= board.TILE_HEIGHT;
                 }
                 break;
             case 'down':
-                if (this.y < BOTTOM_WALL) {
-                    this.y += CANVAS_TILE_HEIGHT;
+                if (this.y < board.BOTTOM_WALL) {
+                    this.y += board.TILE_HEIGHT;
                 }
                 break;
         }
+    }
+}
 
-        console.log(this.x,this.y);
+// Board object that holds the tile calculation abstractions as props
+class Board {
+    constructor() {
+        this.TILE_WIDTH = 101;
+        this.TILE_HEIGHT = 83;
+        this.LEFT_WALL = 0;
+        this.RIGHT_WALL = 404;
+        this.TOP_WALL = 53;
+        this.BOTTOM_WALL = 385;
+        this.OFFSCREEN_TILE = this.LEFT_WALL - this.TILE_WIDTH;
+        this.heroStartTileX = this.TILE_WIDTH * 2;
+        this.heroStartTileY = this.TOP_WALL + (this.TILE_HEIGHT * 4);
+        this.enemyOneStartTileX = this.OFFSCREEN_TILE;
+        this.enemyOneStartTileY = this.TOP_WALL;
+        this.enemyTwoStartTileX = this.OFFSCREEN_TILE;
+        this.enemyTwoStartTileY = this.TOP_WALL + this.TILE_HEIGHT;
+        this.enemyThreeStartTileX = this.OFFSCREEN_TILE - (this.TILE_WIDTH * 1.5);
+        this.enemyThreeStartTileY = this.TOP_WALL + this.TILE_HEIGHT;
+        this.enemyFourStartTileX = this.OFFSCREEN_TILE - (this.TILE_WIDTH * 2);
+        this.enemyFourStartTileY = this.TOP_WALL + (this.TILE_HEIGHT * 2);
     }
 }
 
@@ -106,11 +116,12 @@ class Hero {
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
-const player = new Hero(heroStartTileX, heroStartTileY, 'images/char-boy.png');
-const enemyOne = new Enemy(enemyOneStartTileX, enemyOneStartTileY); // Top row
-const enemyTwo = new Enemy(enemyTwoStartTileX, enemyTwoStartTileY, 400); // Second row
-const enemyThree = new Enemy(enemyThreeStartTileX, enemyThreeStartTileY, 400); // Second row
-const enemyFour = new Enemy(enemyFourStartTileX, enemyFourStartTileY, 300); // Third row
+const board = new Board();
+const player = new Hero(board.heroStartTileX, board.heroStartTileY, 'images/char-boy.png');
+const enemyOne = new Enemy(board.enemyOneStartTileX, board.enemyOneStartTileY); // Top row
+const enemyTwo = new Enemy(board.enemyTwoStartTileX, board.enemyTwoStartTileY, 350); // Second row
+const enemyThree = new Enemy(board.enemyThreeStartTileX, board.enemyThreeStartTileY, 350); // Second row
+const enemyFour = new Enemy(board.enemyFourStartTileX, board.enemyFourStartTileY, 150); // Third row
 const allEnemies = [enemyOne, enemyTwo, enemyThree, enemyFour];
 
 
@@ -135,3 +146,6 @@ document.addEventListener('keyup', function(e) {
 
     player.handleInput(allowedKeys[e.keyCode]);
 });
+
+
+
