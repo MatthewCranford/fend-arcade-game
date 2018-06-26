@@ -9,7 +9,7 @@
  * drawn but that is not the case. What's really happening is the entire "scene"
  * is being drawn over and over, presenting the illusion of animation.
  *
- * This engine makes the canvas' context (ctx) object globally available to make 
+ * This engine makes the canvas' context (ctx) object globally available to make
  * writing app.js a little simpler to work with.
  */
 
@@ -62,7 +62,7 @@ var Engine = (function(global) {
         if (checkVictory()) {
             win.cancelAnimationFrame(frameId);
             toggleVictoryModal();
-        }  
+        }
     }
 
     // Check if player reached the water
@@ -104,7 +104,7 @@ var Engine = (function(global) {
      */
     function update(dt) {
         updateEntities(dt);
-        checkCollisions();  
+        checkCollisions();
     }
 
     /* This is called by the update function and loops through all of the
@@ -137,8 +137,8 @@ var Engine = (function(global) {
         const enemyRight = enemy.x + (board.TILE_WIDTH / COLLISION_BUFFER);
         const playerLeft = player.x;
         const playerRight = player.x + (board.TILE_WIDTH / COLLISION_BUFFER);
-        return ((enemyRight > playerLeft && 
-            enemyLeft < playerRight) && 
+        return ((enemyRight > playerLeft &&
+            enemyLeft < playerRight) &&
             (enemy.y === player.y));
     }
 
@@ -163,7 +163,7 @@ var Engine = (function(global) {
             numRows = 6,
             numCols = 5,
             row, col;
-        
+
         // Before drawing, clear existing canvas
         ctx.clearRect(0,0,canvas.width,canvas.height)
 
@@ -213,7 +213,7 @@ var Engine = (function(global) {
         if (!modal.classList.contains('hide')) {
             toggleVictoryModal();
         }
-        // Reset player position back to start
+        // Reset player pos back to start pos
         player.x = board.heroStartTileX;
         player.y = board.heroStartTileY;
     }

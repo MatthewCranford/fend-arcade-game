@@ -1,8 +1,8 @@
 // Enemies our player must avoid
-/* 
-Accepts 3 parameters: 
-    x position, 
-    y position, 
+/*
+Accepts 3 parameters:
+    x position,
+    y position,
     and movement speed
 */
 var Enemy = function(x, y, speed = 200) {
@@ -15,8 +15,8 @@ var Enemy = function(x, y, speed = 200) {
     // Save initial spawn location
     this.startingX = x;
     this.startingY = y;
-    
-    
+
+
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
     this.sprite = 'images/enemy-bug.png';
@@ -46,10 +46,10 @@ Enemy.prototype.render = function() {
 // Now write your own player class
 // This class requires an update(), render() and
 // a handleInput() method.
-/* 
-Accepts 3 parameters: 
-    x position, 
-    y position, 
+/*
+Accepts 3 parameters:
+    x position,
+    y position,
     and sprite avatar
 */
 class Hero {
@@ -146,6 +146,3 @@ document.addEventListener('keyup', function(e) {
 
     player.handleInput(allowedKeys[e.keyCode]);
 });
-
-
-
