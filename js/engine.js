@@ -122,7 +122,7 @@ var Engine = (function(global) {
         });
     }
 
-    // Check if collision occurred on each enemy unit in allEnemies arr
+    // Check if collision occurred on each enemy unit
     function checkCollisions() {
         allEnemies.forEach(function(enemy) {
             if (isCollision(enemy)) {
@@ -131,7 +131,12 @@ var Engine = (function(global) {
         });
     }
 
-    // Return boolean on whether a player and enemy collision occurred
+ 
+    /**
+     * Return boolean on whether a player and enemy collision occurred
+     * 
+     * @param  {} enemy - Enemy object
+     */
     function isCollision(enemy) {
         const COLLISION_BUFFER = 2 // Reduce hitbox size
         const enemyLeft = enemy.x;
@@ -215,8 +220,7 @@ var Engine = (function(global) {
             toggleVictoryModal();
         }
         // Reset player pos back to start pos
-        player.x = board.heroStartTileX;
-        player.y = board.heroStartTileY;
+        player.respawn();
     }
 
     /* Go ahead and load all of the images we know we're going to need to
