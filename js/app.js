@@ -1,16 +1,4 @@
-// Enemies our player must avoid
-/*
-Accepts 3 parameters:
-    x position,
-    y position,
-    and movement speed
-*/
-var Enemy = function(x, y, speed = 200) {
-    // Variables applied to each of our instances go here,
-    // we've provided one for you to get started
-    this.x = x;
-    this.y = y;
-    this.speed = speed;
+'use strict';
 
     // Save initial spawn location
     this.startingX = x;
