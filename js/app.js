@@ -1,57 +1,45 @@
-// Enemies our player must avoid
-/*
-Accepts 3 parameters:
-    x position,
-    y position,
-    and movement speed
-*/
-var Enemy = function(x, y, speed = 200) {
-    // Variables applied to each of our instances go here,
-    // we've provided one for you to get started
-    this.x = x;
-    this.y = y;
-    this.speed = speed;
+'use strict';
 
-    // Save initial spawn location
-    this.startingX = x;
-    this.startingY = y;
-
-
-    // The image/sprite for our enemies, this uses
-    // a helper we've provided to easily load images
-    this.sprite = 'images/enemy-bug.png';
-};
-
-// Update the enemy's position, required method for game
-// Parameter: dt, a time delta between ticks
-Enemy.prototype.update = function(dt) {
-    // You should multiply any movement by the dt parameter
-    // which will ensure the game runs at the same speed for
-    // all computers.
-    // console.log(dt * 12);
-    if (this.x < board.RIGHT_WALL - board.OFFSCREEN_TILE) {
-        this.x += this.speed * dt;
+// Board object that holds the tile calculation abstractions as props
+class Board {
+    constructor() {
+        this.TILE_WIDTH = 101;
+        this.TILE_HEIGHT = 83;
+        this.LEFT_WALL = 0;
+        this.RIGHT_WALL = 404;
+        this.TOP_WALL = 53;
+        this.BOTTOM_WALL = 385;
+        this.OFFSCREEN_TILE = this.LEFT_WALL - this.TILE_WIDTH;
+        this.heroStartTileX = this.TILE_WIDTH * 2;
+        this.heroStartTileY = this.TOP_WALL + (this.TILE_HEIGHT * 4);
+        this.enemies = [
+            {
+                x: this.OFFSCREEN_TILE,
+                y: this.TOP_WALL
+            }, 
+            {
+                x: this.OFFSCREEN_TILE,
+                y: this.TOP_WALL + this.TILE_HEIGHT
+            }, 
+            {
+                x: this.OFFSCREEN_TILE - (this.TILE_WIDTH * 1.5),
+                y: this.TOP_WALL + this.TILE_HEIGHT
+            },
+            {
+                x: this.OFFSCREEN_TILE - (this.TILE_WIDTH * 2),
+                y: this.TOP_WALL + (this.TILE_HEIGHT * 2)
+            }
+        ]
     }
-    else {
-        this.x = board.OFFSCREEN_TILE;
-        console.log(this.startingX);
-    }
-};
+}
 
-// Draw the enemy on the screen, required method for game
-Enemy.prototype.render = function() {
-    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-};
-
-// Now write your own player class
-// This class requires an update(), render() and
-// a handleInput() method.
-/*
-Accepts 3 parameters:
-    x position,
-    y position,
-    and sprite avatar
-*/
+/**
+ * Player character
+ * 
+ * @param  {} x - x coord position
+ * @param  {} y - y coord position
+ * @param  {} sprite - Player sprite
+ */
 class Hero {
     constructor(x, y, sprite) {
         this.x = x;
@@ -89,41 +77,55 @@ class Hero {
     }
 }
 
-// Board object that holds the tile calculation abstractions as props
-class Board {
-    constructor() {
-        this.TILE_WIDTH = 101;
-        this.TILE_HEIGHT = 83;
-        this.LEFT_WALL = 0;
-        this.RIGHT_WALL = 404;
-        this.TOP_WALL = 53;
-        this.BOTTOM_WALL = 385;
-        this.OFFSCREEN_TILE = this.LEFT_WALL - this.TILE_WIDTH;
-        this.heroStartTileX = this.TILE_WIDTH * 2;
-        this.heroStartTileY = this.TOP_WALL + (this.TILE_HEIGHT * 4);
-        this.enemyOneStartTileX = this.OFFSCREEN_TILE;
-        this.enemyOneStartTileY = this.TOP_WALL;
-        this.enemyTwoStartTileX = this.OFFSCREEN_TILE;
-        this.enemyTwoStartTileY = this.TOP_WALL + this.TILE_HEIGHT;
-        this.enemyThreeStartTileX = this.OFFSCREEN_TILE - (this.TILE_WIDTH * 1.5);
-        this.enemyThreeStartTileY = this.TOP_WALL + this.TILE_HEIGHT;
-        this.enemyFourStartTileX = this.OFFSCREEN_TILE - (this.TILE_WIDTH * 2);
-        this.enemyFourStartTileY = this.TOP_WALL + (this.TILE_HEIGHT * 2);
-    }
-}
+/**
+ * Enemies our player must avoid
+ * 
+ * @param  {} x - x coord position
+ * @param  {} y - y coord position
+ * @param  {} speed=200 - Movement speed
+ */
+class Enemy {
+    constructor(x, y, speed = 200) {
+        this.x = x;
+        this.y = y;
+        this.speed = speed;
+        this.sprite = 'images/enemy-bug.png';
 
+        // Initial spawn location
+        this.startingX = x;
+        this.startingY = y;
+    }
+    // Update the enemy's position, required method for game
+    // Parameter: dt, a time delta between ticks
+    update(dt) {
+        // You should multiply any movement by the dt parameter
+        // which will ensure the game runs at the same speed for
+        // all computers.
+        if (this.x < board.RIGHT_WALL - board.OFFSCREEN_TILE) {
+            this.x += this.speed * dt;
+        }
+        else {
+            this.x = board.OFFSCREEN_TILE;
+        }
+    }  
+    // Draw the enemy on the screen, required method for game
+    render() {
+        ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+    } 
+};
 
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
 const board = new Board();
 const player = new Hero(board.heroStartTileX, board.heroStartTileY, 'images/char-boy.png');
-const enemyOne = new Enemy(board.enemyOneStartTileX, board.enemyOneStartTileY); // Top row
-const enemyTwo = new Enemy(board.enemyTwoStartTileX, board.enemyTwoStartTileY, 350); // Second row
-const enemyThree = new Enemy(board.enemyThreeStartTileX, board.enemyThreeStartTileY, 350); // Second row
-const enemyFour = new Enemy(board.enemyFourStartTileX, board.enemyFourStartTileY, 150); // Third row
-const allEnemies = [enemyOne, enemyTwo, enemyThree, enemyFour];
 
+// Create and store all enemy objects in an array
+let allEnemies = [];
+for (let i = 0; i <= 3; i++) {
+    const newEnemy = new Enemy(board.enemies[i].x, board.enemies[i].y);
+    allEnemies.push(newEnemy);
+}
 
 
 

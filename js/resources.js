@@ -1,3 +1,5 @@
+'use strict';
+
 /* Resources.js
  * This is simply an image loading utility. It eases the process of loading
  * image files so that they can be used within your game. It also includes
@@ -6,7 +8,6 @@
  */
 (function() {
     var resourceCache = {};
-    var loading = [];
     var readyCallbacks = [];
 
     /* This is the publicly accessible image loading function. It accepts
