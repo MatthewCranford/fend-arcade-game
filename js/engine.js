@@ -61,18 +61,10 @@ var Engine = (function(global) {
         frameId = win.requestAnimationFrame(main);
 
         // If player won -> stop animation frame and call victory
-        if (checkVictory()) {
-            win.cancelAnimationFrame(frameId);
-            toggleVictoryModal();
-        }
+        game.board.checkVictory(frameId);
     }
 
-    // Check if player reached the water
-    function checkVictory() {
-        if (game.player.y === game.board.TOP_WALL) {
-            return true;
-        }
-    }
+
 
     // Handle victory modal's on/off state
     function toggleVictoryModal() {
@@ -121,11 +113,6 @@ var Engine = (function(global) {
         });
         game.player.update();
     }
-
-
-
- 
-    
 
     /* This function initially draws the "game level", it will then call
      * the renderEntities function. Remember, this function is called every

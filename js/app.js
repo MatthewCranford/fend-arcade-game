@@ -71,7 +71,28 @@
                 };
                 game.player.handleInput(allowedKeys[e.keyCode]);
             });
-        }   
+        } 
+
+        checkVictory(frameId) {
+            if (this.victory()) {
+                global.cancelAnimationFrame(frameId);
+                this.toggleVictoryModal();
+            }
+        }
+     
+        // Check if player reached the water
+        victory() {              
+            if (game.player.y === game.board.TOP_WALL) {
+                return true;
+            }
+        }
+
+        // Handle victory modal's on/off state
+       toggleVictoryModal() {
+            const modal = document.querySelector('.modal');
+            modal.classList.toggle('hide');
+        }
+    
     }
 
     /**
@@ -90,10 +111,9 @@
             this.sprite = sprite;
         }
 
+
         update() {
-          
             game.allEnemies.forEach(enemy => {
-                console.log(this);
                 if (this.checkCollision(enemy)) {
                     this.resetHero();
                 }
