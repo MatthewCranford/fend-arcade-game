@@ -19,7 +19,7 @@
             this.heroStartTileX = this.TILE_WIDTH * 2;
             this.heroStartTileY = this.TOP_WALL + (this.TILE_HEIGHT * 4);
 
-            // Start coords of enemies
+            // Enemy parameters
             this.enemies = [
                 {
                     x: this.OFFSCREEN_TILE,
@@ -27,15 +27,18 @@
                 }, 
                 {
                     x: this.OFFSCREEN_TILE,
-                    y: this.TOP_WALL + this.TILE_HEIGHT
+                    y: this.TOP_WALL + this.TILE_HEIGHT,
+                    speed: 400
                 }, 
                 {
                     x: this.OFFSCREEN_TILE - (this.TILE_WIDTH * 1.5),
-                    y: this.TOP_WALL + this.TILE_HEIGHT
+                    y: this.TOP_WALL + this.TILE_HEIGHT,
+                    speed: 400
                 },
                 {
                     x: this.OFFSCREEN_TILE - (this.TILE_WIDTH * 2),
-                    y: this.TOP_WALL + (this.TILE_HEIGHT * 2)
+                    y: this.TOP_WALL + (this.TILE_HEIGHT * 2),
+                    speed: 150
                 }
             ];
 
@@ -53,7 +56,7 @@
         initEnemies() {
             game.allEnemies = [];
             for (let i = 0; i <= 3; i++) {
-                const newEnemy = new Enemy(this.enemies[i].x, this.enemies[i].y);
+                const newEnemy = new Enemy(this.enemies[i].x, this.enemies[i].y, this.enemies[i].speed);
                 game.allEnemies.push(newEnemy);
             }
         }
