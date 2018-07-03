@@ -183,6 +183,8 @@ var Engine = (function(global) {
 
         // Reset player pos back to start pos
         game.player.resetHero();
+
+        // Allow animation frame to start again
         game.board.paintNextFrame = true;
     }
 

@@ -5,7 +5,7 @@
 
     // Escape global space by storing game in object
     global.game = {}
-
+    
     // Game content and logic
     class Board {
         constructor() {
@@ -156,8 +156,12 @@
         render() {
             ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
         }
-
-        // Hero movement
+    
+        /**
+         * Hero movement
+         * 
+         * @param  {string} key - String of direction to change
+         */
         handleInput(key) {
             switch (key) {
                 case 'left':
@@ -208,20 +212,24 @@
             this.startingX = x;
             this.startingY = y;
         }
-
-        // Update the enemy's position, required method for game
-        // Parameter: dt, a time delta between ticks
+  
+        /**
+         * Enemy position logic
+         * 
+         * @param  {int} dt - DeltaTime for independent framerate 
+         */
         update(dt) {
-            // You should multiply any movement by the dt parameter
-            // which will ensure the game runs at the same speed for
-            // all computers.
             if (this.x < game.board.RIGHT_WALL - game.board.OFFSCREEN_TILE) {
+                // You should multiply any movement by the dt parameter
+                // which will ensure the game runs at the same speed for
+                // all computers.
                 this.x += this.speed * dt;
             }
             else {
                 this.x = game.board.OFFSCREEN_TILE;
             }
-        }  
+        } 
+     
         // Draw the enemy on the screen, required method for game
         render() {
             ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
@@ -230,6 +238,6 @@
 
     game.board = new Board();
     game.board.initBoard();
-  
-})(window)
+
+})(window);
 
