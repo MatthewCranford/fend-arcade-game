@@ -69,7 +69,7 @@ var Engine = (function(global) {
 
     // Check if player reached the water
     function checkVictory() {
-        if (player.y === board.TOP_WALL) {
+        if (game.player.y === game.board.TOP_WALL) {
             return true;
         }
     }
@@ -112,19 +112,19 @@ var Engine = (function(global) {
     /* This is called by the update function and loops through all of the
      * objects within your allEnemies array as defined in app.js and calls
      * their update() methods. It will then call the update function for your
-     * player object. These update methods should focus purely on updating
+     * game.player object. These update methods should focus purely on updating
      * the data/properties related to the object. Do your drawing in your
      * render methods.
      */
     function updateEntities(dt) {
-        allEnemies.forEach(function(enemy) {
+        game.allEnemies.forEach(function(enemy) {
             enemy.update(dt);
         });
     }
 
     // Check if collision occurred on each enemy unit
     function checkCollisions() {
-        allEnemies.forEach(function(enemy) {
+        game.allEnemies.forEach(function(enemy) {
             if (isCollision(enemy)) {
                reset();
             }
@@ -133,19 +133,19 @@ var Engine = (function(global) {
 
  
     /**
-     * Return boolean on whether a player and enemy collision occurred
+     * Return boolean on whether a game.player and enemy collision occurred
      * 
      * @param  {} enemy - Enemy object
      */
     function isCollision(enemy) {
         const COLLISION_BUFFER = 2 // Reduce hitbox size
         const enemyLeft = enemy.x;
-        const enemyRight = enemy.x + (board.TILE_WIDTH / COLLISION_BUFFER);
-        const playerLeft = player.x;
-        const playerRight = player.x + (board.TILE_WIDTH / COLLISION_BUFFER);
+        const enemyRight = enemy.x + (game.board.TILE_WIDTH / COLLISION_BUFFER);
+        const playerLeft = game.player.x;
+        const playerRight = game.player.x + (game.board.TILE_WIDTH / COLLISION_BUFFER);
         return ((enemyRight > playerLeft &&
             enemyLeft < playerRight) &&
-            (enemy.y === player.y));
+            (enemy.y === game.player.y));
     }
 
     /* This function initially draws the "game level", it will then call
@@ -201,11 +201,11 @@ var Engine = (function(global) {
         /* Loop through all of the objects within the allEnemies array and call
          * the render function you have defined.
          */
-        allEnemies.forEach(function(enemy) {
+        game.allEnemies.forEach(function(enemy) {
             enemy.render();
         });
 
-        player.render();
+        game.player.render();
     }
 
     /* This function does nothing but it could have been a good place to
@@ -220,8 +220,8 @@ var Engine = (function(global) {
             toggleVictoryModal();
         }
         // Reset player pos back to start pos
-        player.x = board.heroStartTileX;
-        player.y = board.heroStartTileY;
+        game.player.x = game.board.heroStartTileX;
+        game.player.y = game.board.heroStartTileY;
     }
 
     /* Go ahead and load all of the images we know we're going to need to
