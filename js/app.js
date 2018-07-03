@@ -1,10 +1,11 @@
-'use strict';
+/*jshint esversion: 6 */
 
 // IIFE call with global window object
 (function(global) {
+    'use strict';
 
     // Escape global space by storing game in object
-    global.game = {}
+    global.game = {};
     
     // Game content and logic
     class Board {
@@ -129,7 +130,7 @@
                  * @param  {object} enemy - Enemy object
                  */
                 function collision(enemy) {
-                    const COLLISION_BUFFER = 2 // Reduce hitbox size
+                    const COLLISION_BUFFER = 2; // Reduce hitbox size
                     const enemyLeft = enemy.x;
                     const enemyRight = enemy.x + (game.board.TILE_WIDTH / COLLISION_BUFFER);
                     const playerLeft = game.player.x;
@@ -237,7 +238,7 @@
         render() {
             ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
         } 
-    };
+    }
 
     game.board = new Board();
     game.board.initBoard();

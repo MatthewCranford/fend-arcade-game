@@ -1,4 +1,4 @@
-'use strict';
+/*jshint esversion: 6 */
 
 /* Resources.js
  * This is simply an image loading utility. It eases the process of loading
@@ -7,8 +7,9 @@
  * to load the same image multiple times.
  */
 (function() {
-    var resourceCache = {};
-    var readyCallbacks = [];
+    'use strict';
+    const resourceCache = {};
+    const readyCallbacks = [];
 
     /* This is the publicly accessible image loading function. It accepts
      * an array of strings pointing to image files or a string for a single
@@ -46,7 +47,7 @@
             /* This URL has not been previously loaded and is not present
              * within our cache; we'll need to load this image.
              */
-            var img = new Image();
+            const img = new Image();
             img.onload = function() {
                 /* Once our image has properly loaded, add it to our cache
                  * so that we can simply return this image if the developer
@@ -83,8 +84,8 @@
      * for loading have in fact been properly loaded.
      */
     function isReady() {
-        var ready = true;
-        for(var k in resourceCache) {
+        let ready = true;
+        for(let k in resourceCache) {
             if(resourceCache.hasOwnProperty(k) &&
                !resourceCache[k]) {
                 ready = false;

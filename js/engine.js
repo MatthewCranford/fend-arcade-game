@@ -1,4 +1,4 @@
-'use strict';
+/*jshint esversion: 6 */
 
 /* Engine.js
  * This file provides the game loop functionality (update entities and render),
@@ -15,23 +15,23 @@
  * writing app.js a little simpler to work with.
  */
 
-var Engine = (function(global) {
+(function(global) {
+    'use strict';
     /* Predefine the variables we'll be using within this scope,
      * create the canvas element, grab the 2D context for that canvas
      * set the canvas elements height/width and add it to the DOM.
      */
-    var doc = global.document,
+    const doc = global.document,
         win = global.window,
         canvas = doc.createElement('canvas'),
-        ctx = canvas.getContext('2d'),
-        lastTime,
+        ctx = canvas.getContext('2d');
+
+    let lastTime,
         frameId;
 
     canvas.width = 505;
     canvas.height = 606;
     doc.body.appendChild(canvas);
-
-   
 
     /* This function serves as the kickoff point for the game loop itself
      * and handles properly calling the update and render methods.
@@ -43,7 +43,7 @@ var Engine = (function(global) {
          * would be the same for everyone (regardless of how fast their
          * computer is) - hurray time!
          */
-        var now = Date.now(),
+        const now = Date.now(),
             dt = (now - lastTime) / 1000.0;
 
         /* Call our update/render functions, pass along the time delta to
@@ -78,9 +78,6 @@ var Engine = (function(global) {
         lastTime = Date.now();
         main();
     }
-
-    // Event listener for victory modal replay button which calls new game
- 
 
     /* This function is called by main (our game loop) and itself calls all
      * of the functions which may need to update entity's data. Based on how
@@ -119,7 +116,7 @@ var Engine = (function(global) {
         /* This array holds the relative URL to the image used
          * for that particular row of the game level.
          */
-        var rowImages = [
+        const rowImages = [
                 'images/water-block.png',   // Top row is water
                 'images/stone-block.png',   // Row 1 of 3 of stone
                 'images/stone-block.png',   // Row 2 of 3 of stone
@@ -128,11 +125,13 @@ var Engine = (function(global) {
                 'images/grass-block.png'    // Row 2 of 2 of grass
             ],
             numRows = 6,
-            numCols = 5,
-            row, col;
+            numCols = 5;
+
+        let row,
+            col;
 
         // Before drawing, clear existing canvas
-        ctx.clearRect(0,0,canvas.width,canvas.height)
+        ctx.clearRect(0,0,canvas.width,canvas.height);
 
         /* Loop through the number of rows and columns we've defined above
          * and, using the rowImages array, draw the correct image for that
@@ -209,4 +208,5 @@ var Engine = (function(global) {
 
     // Call new game on replay
     document.querySelector('#replay').addEventListener('click', ()=> { init();});
+    
 })(this);
