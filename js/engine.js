@@ -31,6 +31,8 @@ var Engine = (function(global) {
     canvas.height = 606;
     doc.body.appendChild(canvas);
 
+   
+
     /* This function serves as the kickoff point for the game loop itself
      * and handles properly calling the update and render methods.
      */
@@ -59,17 +61,12 @@ var Engine = (function(global) {
          * function again as soon as the browser is able to draw another frame.
          */
         frameId = win.requestAnimationFrame(main);
-
+    
         // If player won -> stop animation frame and call victory
-        game.board.checkVictory(frameId);
-    }
-
-
-
-    // Handle victory modal's on/off state
-    function toggleVictoryModal() {
-        const modal = document.querySelector('.modal');
-        modal.classList.toggle('hide');
+        if (game.board.paintNextFrame === false) {
+            global.cancelAnimationFrame(frameId);
+            game.board.toggleVictoryModal();
+        }
     }
 
     /* This function does some initial setup that should only occur once,
@@ -83,9 +80,7 @@ var Engine = (function(global) {
     }
 
     // Event listener for victory modal replay button which calls new game
-    document.querySelector('#replay').addEventListener('click', ()=> {
-        init();
-    })
+ 
 
     /* This function is called by main (our game loop) and itself calls all
      * of the functions which may need to update entity's data. Based on how
@@ -111,7 +106,7 @@ var Engine = (function(global) {
         game.allEnemies.forEach(function(enemy) {
             enemy.update(dt);
         });
-        game.player.update();
+        game.player.update(frameId);
     }
 
     /* This function initially draws the "game level", it will then call
@@ -171,7 +166,7 @@ var Engine = (function(global) {
             enemy.render();
         });
 
-        game.player.render();
+        game.player.render(frameId);
     }
 
     /* This function does nothing but it could have been a good place to
@@ -181,12 +176,14 @@ var Engine = (function(global) {
     function reset() {
         const modal = document.querySelector('.modal');
 
-        // If modal is active turn off
+        // If modal is active -> turn off
         if (!modal.classList.contains('hide')) {
-            toggleVictoryModal();
+            game.board.toggleVictoryModal();
         }
+
         // Reset player pos back to start pos
         game.player.resetHero();
+        game.board.paintNextFrame = true;
     }
 
     /* Go ahead and load all of the images we know we're going to need to
@@ -207,4 +204,7 @@ var Engine = (function(global) {
      * from within their app.js files.
      */
     global.ctx = ctx;
+
+    // Call new game on replay
+    document.querySelector('#replay').addEventListener('click', ()=> { init();});
 })(this);

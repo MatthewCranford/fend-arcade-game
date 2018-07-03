@@ -37,9 +37,13 @@
                     x: this.OFFSCREEN_TILE - (this.TILE_WIDTH * 2),
                     y: this.TOP_WALL + (this.TILE_HEIGHT * 2)
                 }
-            ]
+            ];
+
+            // Controls painting next animation frame
+            this.paintNextFrame = true;
         }
 
+        // Create instances of all enemies
         initEnemies() {
             game.allEnemies = [];
             for (let i = 0; i <= 3; i++) {
@@ -48,6 +52,7 @@
             }
         }
 
+        // Create player instance
         initPlayer() {
             game.player = new Hero(this.heroStartTileX, this.heroStartTileY, 'images/char-boy.png');
         }
@@ -73,33 +78,18 @@
             });
         } 
 
-        checkVictory(frameId) {
-            if (this.victory()) {
-                global.cancelAnimationFrame(frameId);
-                this.toggleVictoryModal();
-            }
-        }
-     
-        // Check if player reached the water
-        victory() {              
-            if (game.player.y === game.board.TOP_WALL) {
-                return true;
-            }
-        }
-
         // Handle victory modal's on/off state
        toggleVictoryModal() {
             const modal = document.querySelector('.modal');
             modal.classList.toggle('hide');
-        }
-    
+        } 
     }
 
     /**
      * Player character
      * 
-     * @param  {} x - x coord position
-     * @param  {} y - y coord position
+     * @param  {int} x - x coord position
+     * @param  {int} y - y coord position
      * @param  {string} sprite - Player sprite
      */
     class Hero {
@@ -111,29 +101,49 @@
             this.sprite = sprite;
         }
 
-
+        // Player position logic
         update() {
-            game.allEnemies.forEach(enemy => {
-                if (this.checkCollision(enemy)) {
-                    this.resetHero();
+            checkCollision();
+            checkVictory();
+
+            // Checks if player collides with enemy
+            function checkCollision() {
+                game.allEnemies.forEach(enemy => {
+                    if (collision(enemy)) {
+                        game.player.resetHero();
+                    }
+                });
+
+                /**
+                 * Return boolean on whether a game.player and enemy collision occurred
+                 * 
+                 * @param  {object} enemy - Enemy object
+                 */
+                function collision(enemy) {
+                    const COLLISION_BUFFER = 2 // Reduce hitbox size
+                    const enemyLeft = enemy.x;
+                    const enemyRight = enemy.x + (game.board.TILE_WIDTH / COLLISION_BUFFER);
+                    const playerLeft = game.player.x;
+                    const playerRight = game.player.x + (game.board.TILE_WIDTH / COLLISION_BUFFER);
+                    return ((enemyRight > playerLeft &&
+                        enemyLeft < playerRight) &&
+                        (enemy.y === game.player.y));
                 }
-            });
-        }
-        
-        /**
-         * Return boolean on whether a game.player and enemy collision occurred
-         * 
-         * @param  {} enemy - Enemy object
-         */
-        checkCollision(enemy) {
-            const COLLISION_BUFFER = 2 // Reduce hitbox size
-            const enemyLeft = enemy.x;
-            const enemyRight = enemy.x + (game.board.TILE_WIDTH / COLLISION_BUFFER);
-            const playerLeft = game.player.x;
-            const playerRight = game.player.x + (game.board.TILE_WIDTH / COLLISION_BUFFER);
-            return ((enemyRight > playerLeft &&
-                enemyLeft < playerRight) &&
-                (enemy.y === game.player.y));
+            }
+
+            // Check if player reached river
+            function checkVictory() {
+                if (victory()) {
+                    game.board.paintNextFrame = false;
+                }
+
+                // Check if player reached the water
+                function victory() {              
+                    if (game.player.y === game.board.TOP_WALL) {
+                        return true;
+                    }
+                }
+            }
         }
 
         // Render hero
