@@ -220,8 +220,7 @@ var Engine = (function(global) {
             toggleVictoryModal();
         }
         // Reset player pos back to start pos
-        game.player.x = game.board.heroStartTileX;
-        game.player.y = game.board.heroStartTileY;
+        game.player.resetHero();
     }
 
     /* Go ahead and load all of the images we know we're going to need to

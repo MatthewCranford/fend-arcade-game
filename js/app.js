@@ -3,7 +3,7 @@
 // IIFE call with global window object
 (function(global) {
 
-    // Assign game object to the global scope
+    // Escape global space by storing game in object
     global.game = {}
 
     // Game content and logic
@@ -18,6 +18,8 @@
             this.OFFSCREEN_TILE = this.LEFT_WALL - this.TILE_WIDTH;
             this.heroStartTileX = this.TILE_WIDTH * 2;
             this.heroStartTileY = this.TOP_WALL + (this.TILE_HEIGHT * 4);
+
+            // Start coords of enemies
             this.enemies = [
                 {
                     x: this.OFFSCREEN_TILE,
@@ -49,8 +51,7 @@
         initPlayer() {
             game.player = new Hero(this.heroStartTileX, this.heroStartTileY, 'images/char-boy.png');
         }
-
-            
+ 
         // This listens for key presses and sends the keys to your
         // Player.handleInput() method. You don't need to modify this.
         initKeys() {
@@ -83,15 +84,17 @@
      */
     class Hero {
         constructor(x, y, sprite) {
-            this.x = x;
-            this.y = y;
+            this.startX = x;
+            this.startY = y;
+            this.x = this.startX;
+            this.y = this.startY;
             this.sprite = sprite;
         }
         // Render hero
         render() {
             ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
         }
-        // Handle user keyboard input
+        // Handle user movement input
         handleInput(key) {
             switch (key) {
                 case 'left':
@@ -115,6 +118,11 @@
                     }
                     break;
             }
+        }
+
+        resetHero() {
+            this.x = this.startX;
+            this.y = this.startY;
         }
     }
 
@@ -140,7 +148,6 @@
         // Update the enemy's position, required method for game
         // Parameter: dt, a time delta between ticks
         update(dt) {
-
             // You should multiply any movement by the dt parameter
             // which will ensure the game runs at the same speed for
             // all computers.
@@ -151,27 +158,16 @@
                 this.x = game.board.OFFSCREEN_TILE;
             }
         }  
-
         // Draw the enemy on the screen, required method for game
         render() {
             ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
         } 
     };
 
-    // Now instantiate your objects.
-    // Place all enemy objects in an array called allEnemies
-    // Place the player object in a variable called player
     game.board = new Board();
     game.board.initEnemies();
     game.board.initPlayer();
     game.board.initKeys();
-
-    // Create and store all enemy objects in an array
-   
-
-
-
-
   
 })(window)
 
