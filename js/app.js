@@ -49,6 +49,28 @@
         initPlayer() {
             game.player = new Hero(this.heroStartTileX, this.heroStartTileY, 'images/char-boy.png');
         }
+
+            
+        // This listens for key presses and sends the keys to your
+        // Player.handleInput() method. You don't need to modify this.
+        initKeys() {
+            document.addEventListener('keyup', function(e) {
+                var allowedKeys = {
+                    // Arrows
+                    37: 'left',
+                    38: 'up',
+                    39: 'right',
+                    40: 'down',
+
+                    // WASD
+                    65: 'left',
+                    87: 'up',
+                    68: 'right',
+                    83: 'down'
+                };
+                game.player.handleInput(allowedKeys[e.keyCode]);
+            });
+        }   
     }
 
 
@@ -57,7 +79,7 @@
      * 
      * @param  {} x - x coord position
      * @param  {} y - y coord position
-     * @param  {} sprite - Player sprite
+     * @param  {string} sprite - Player sprite
      */
     class Hero {
         constructor(x, y, sprite) {
@@ -99,9 +121,9 @@
     /**
      * Enemies our player must avoid
      * 
-     * @param  {} x - x coord position
-     * @param  {} y - y coord position
-     * @param  {} speed=200 - Movement speed
+     * @param  {int} x - x coord position
+     * @param  {int} y - y coord position
+     * @param  {int} speed=200 - Movement speed
      */
     class Enemy {
         constructor(x, y, speed = 200) {
@@ -114,9 +136,11 @@
             this.startingX = x;
             this.startingY = y;
         }
+
         // Update the enemy's position, required method for game
         // Parameter: dt, a time delta between ticks
         update(dt) {
+
             // You should multiply any movement by the dt parameter
             // which will ensure the game runs at the same speed for
             // all computers.
@@ -127,6 +151,7 @@
                 this.x = game.board.OFFSCREEN_TILE;
             }
         }  
+
         // Draw the enemy on the screen, required method for game
         render() {
             ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
@@ -139,31 +164,13 @@
     game.board = new Board();
     game.board.initEnemies();
     game.board.initPlayer();
+    game.board.initKeys();
 
     // Create and store all enemy objects in an array
    
 
 
 
-    // This listens for key presses and sends the keys to your
-    // Player.handleInput() method. You don't need to modify this.
-    document.addEventListener('keyup', function(e) {
-        var allowedKeys = {
-            // Arrows
-            37: 'left',
-            38: 'up',
-            39: 'right',
-            40: 'down',
-
-            // WASD
-            65: 'left',
-            87: 'up',
-            68: 'right',
-            83: 'down'
-        };
-
-        game.player.handleInput(allowedKeys[e.keyCode]);
-    });
 
   
 })(window)
