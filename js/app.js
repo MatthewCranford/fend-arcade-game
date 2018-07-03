@@ -43,6 +43,12 @@
             this.paintNextFrame = true;
         }
 
+        initBoard() {
+            this.initEnemies();
+            this.initPlayer();
+            this.initKeys();
+        }
+
         // Create instances of all enemies
         initEnemies() {
             game.allEnemies = [];
@@ -223,9 +229,7 @@
     };
 
     game.board = new Board();
-    game.board.initEnemies();
-    game.board.initPlayer();
-    game.board.initKeys();
+    game.board.initBoard();
   
 })(window)
 
