@@ -74,7 +74,6 @@
         }   
     }
 
-
     /**
      * Player character
      * 
@@ -90,11 +89,39 @@
             this.y = this.startY;
             this.sprite = sprite;
         }
+
+        update() {
+          
+            game.allEnemies.forEach(enemy => {
+                console.log(this);
+                if (this.checkCollision(enemy)) {
+                    this.resetHero();
+                }
+            });
+        }
+        
+        /**
+         * Return boolean on whether a game.player and enemy collision occurred
+         * 
+         * @param  {} enemy - Enemy object
+         */
+        checkCollision(enemy) {
+            const COLLISION_BUFFER = 2 // Reduce hitbox size
+            const enemyLeft = enemy.x;
+            const enemyRight = enemy.x + (game.board.TILE_WIDTH / COLLISION_BUFFER);
+            const playerLeft = game.player.x;
+            const playerRight = game.player.x + (game.board.TILE_WIDTH / COLLISION_BUFFER);
+            return ((enemyRight > playerLeft &&
+                enemyLeft < playerRight) &&
+                (enemy.y === game.player.y));
+        }
+
         // Render hero
         render() {
             ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
         }
-        // Handle user movement input
+
+        // Hero movement
         handleInput(key) {
             switch (key) {
                 case 'left':
@@ -120,6 +147,7 @@
             }
         }
 
+        // Reset hero back to starting coords
         resetHero() {
             this.x = this.startX;
             this.y = this.startY;

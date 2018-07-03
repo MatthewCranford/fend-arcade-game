@@ -106,7 +106,6 @@ var Engine = (function(global) {
      */
     function update(dt) {
         updateEntities(dt);
-        checkCollisions();
     }
 
     /* This is called by the update function and loops through all of the
@@ -120,33 +119,13 @@ var Engine = (function(global) {
         game.allEnemies.forEach(function(enemy) {
             enemy.update(dt);
         });
+        game.player.update();
     }
 
-    // Check if collision occurred on each enemy unit
-    function checkCollisions() {
-        game.allEnemies.forEach(function(enemy) {
-            if (isCollision(enemy)) {
-               reset();
-            }
-        });
-    }
+
 
  
-    /**
-     * Return boolean on whether a game.player and enemy collision occurred
-     * 
-     * @param  {} enemy - Enemy object
-     */
-    function isCollision(enemy) {
-        const COLLISION_BUFFER = 2 // Reduce hitbox size
-        const enemyLeft = enemy.x;
-        const enemyRight = enemy.x + (game.board.TILE_WIDTH / COLLISION_BUFFER);
-        const playerLeft = game.player.x;
-        const playerRight = game.player.x + (game.board.TILE_WIDTH / COLLISION_BUFFER);
-        return ((enemyRight > playerLeft &&
-            enemyLeft < playerRight) &&
-            (enemy.y === game.player.y));
-    }
+    
 
     /* This function initially draws the "game level", it will then call
      * the renderEntities function. Remember, this function is called every
